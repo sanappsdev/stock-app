@@ -107,7 +107,7 @@ export default function AdminDashboard() {
             icon={Truck}
             label="Delivery Persons"
             value={stats.totalDeliveryPersons}
-            onPress={() => router.push('/(app)/admin/delivery-persons')}
+            onPress={() => router.push('/(app)/admin/delivery')}
           />
           <MenuCard
             icon={ShoppingCart}

@@ -1,9 +1,10 @@
 import { View, Text } from 'react-native';
 
-export default function EditCustomerScreen() {
+export default function OrderDetailScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Edit Customer Screen</Text>
+      <Text>Order Detail Screen</Text>
     </View>
   );
 }
+

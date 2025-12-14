@@ -3,94 +3,69 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
+import { useAuth } from '@/contexts/AuthContext';
 
-interface Order {
+interface Product {
   id: string;
-  order_number: string;
-  customer_id: string;
-  status: string;
-  total_amount: number;
-  created_at: string;
-  customers?: { name: string; shop_name: string };
+  name: string;
+  company: string;
+  selling_price: number;
+  quantity: number;
+  description?: string;
 }
 
-export default function OrdersScreen() {
-  const [orders, setOrders] = useState<Order[]>([]);
+export default function ProductsScreen() {
+  const { userProfile } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchOrders = useCallback(async () => {
+  const fetchProducts = useCallback(async () => {
     try {
-      const { data } = await db.orders.getAll();
-      setOrders(data || []);
+      const { data } = await db.products.getAll();
+      setProducts(data || []);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleDelete = (id: string) => {
-    Alert.alert('Delete Order', 'Are you sure?', [
+    Alert.alert('Delete Product', 'Are you sure?', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          const { error } = await db.orders.delete(id);
+          const { error } = await db.products.delete(id);
           if (!error) {
-            setOrders(orders.filter(o => o.id !== id));
+            setProducts(products.filter(p => p.id !== id));
           }
         },
       },
     ]);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return '#FF9800';
-      case 'assigned':
-        return '#2196F3';
-      case 'in_transit':
-        return '#9C27B0';
-      case 'delivered':
-        return '#4CAF50';
-      case 'cancelled':
-        return '#f44336';
-      default:
-        return '#999';
-    }
-  };
-
-  const OrderCard = ({ item }: { item: Order }) => (
-    <View style={styles.orderCard}>
-      <View style={styles.orderInfo}>
-        <Text style={styles.orderNumber}>{item.order_number}</Text>
-        <Text style={styles.customerName}>{item.customers?.shop_name || 'Unknown'}</Text>
-        <View style={styles.orderDetails}>
-          <Text style={styles.orderDetail}>Amount: ${item.total_amount.toFixed(2)}</Text>
-          <View
-            style={[
-              styles.statusBadge,
-              { backgroundColor: getStatusColor(item.status) + '20' },
-            ]}
-          >
-            <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
-              {item.status.toUpperCase()}
-            </Text>
-          </View>
+  const ProductCard = ({ item }: { item: Product }) => (
+    <View style={styles.productCard}>
+      <View style={styles.productInfo}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productCompany}>{item.company}</Text>
+        <View style={styles.productDetails}>
+          <Text style={styles.productDetail}>Price: ${item.selling_price}</Text>
+          <Text style={styles.productDetail}>Stock: {item.quantity}</Text>
         </View>
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/order-detail/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/detail/${item.id}`)}>
           <Eye size={20} color="#007AFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/edit-order/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/edit/${item.id}`)}>
           <Edit2 size={20} color="#FF9800" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
@@ -103,24 +78,24 @@ export default function OrdersScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Orders</Text>
+        <Text style={styles.title}>Products</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/create-order')}
+          onPress={() => router.push('/(app)/admin/products/add')}
         >
           <Plus size={20} color="#fff" />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={orders}
-        renderItem={OrderCard}
+        data={products}
+        renderItem={ProductCard}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchProducts} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No orders found</Text>
+            <Text style={styles.emptyText}>No products found</Text>
           </View>
         }
       />
@@ -157,7 +132,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  orderCard: {
+  productCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
@@ -165,37 +140,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  orderInfo: {
+  productInfo: {
     flex: 1,
   },
-  orderNumber: {
+  productName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1a1a1a',
     marginBottom: 4,
   },
-  customerName: {
+  productCompany: {
     fontSize: 14,
     color: '#666',
     marginBottom: 8,
   },
-  orderDetails: {
+  productDetails: {
     flexDirection: 'row',
     gap: 12,
-    alignItems: 'center',
   },
-  orderDetail: {
+  productDetail: {
     fontSize: 12,
     color: '#999',
-  },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  statusText: {
-    fontSize: 11,
-    fontWeight: '600',
   },
   actions: {
     flexDirection: 'row',
@@ -210,3 +175,4 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+

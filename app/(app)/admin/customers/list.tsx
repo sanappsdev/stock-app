@@ -60,10 +60,10 @@ export default function CustomersScreen() {
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/customer-detail/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/customers/detail/${item.id}`)}>
           <Eye size={20} color="#007AFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/edit-customer/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/customers/edit/${item.id}`)}>
           <Edit2 size={20} color="#FF9800" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
@@ -79,7 +79,7 @@ export default function CustomersScreen() {
         <Text style={styles.title}>Customers</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/add-customer')}
+          onPress={() => router.push('/(app)/admin/customers/add')}
         >
           <Plus size={20} color="#fff" />
         </TouchableOpacity>
@@ -173,3 +173,4 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+

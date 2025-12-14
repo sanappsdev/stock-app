@@ -60,7 +60,7 @@ export default function ProductDetailScreen() {
           <Text style={styles.backButton}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Product Details</Text>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/edit-product/${product.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/edit/${product.id}`)}>
           <Edit2 size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>
@@ -223,3 +223,4 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+

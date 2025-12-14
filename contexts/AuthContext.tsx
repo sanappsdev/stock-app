@@ -99,12 +99,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
+      return data;
     } catch (error) {
       console.error('Sign in error:', error);
       throw error;
@@ -134,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isDeliveryPerson: userProfile?.role === 'delivery_person',
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value as any}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

@@ -3,69 +3,71 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
-import { useAuth } from '@/contexts/AuthContext';
 
-interface Product {
+interface DeliveryPerson {
   id: string;
   name: string;
-  company: string;
-  selling_price: number;
-  quantity: number;
-  description?: string;
+  contact_number: string;
+  whatsapp_number?: string;
+  address?: string;
+  is_active: boolean;
 }
 
-export default function ProductsScreen() {
-  const { userProfile } = useAuth();
-  const [products, setProducts] = useState<Product[]>([]);
+export default function DeliveryPersonsScreen() {
+  const [persons, setPersons] = useState<DeliveryPerson[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProducts = useCallback(async () => {
+  const fetchPersons = useCallback(async () => {
     try {
-      const { data } = await db.products.getAll();
-      setProducts(data || []);
+      const { data } = await db.deliveryPersons.getAll();
+      setPersons(data || []);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching delivery persons:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchPersons();
+  }, [fetchPersons]);
 
   const handleDelete = (id: string) => {
-    Alert.alert('Delete Product', 'Are you sure?', [
+    Alert.alert('Delete Delivery Person', 'Are you sure?', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          const { error } = await db.products.delete(id);
+          const { error } = await db.deliveryPersons.delete(id);
           if (!error) {
-            setProducts(products.filter(p => p.id !== id));
+            setPersons(persons.filter(p => p.id !== id));
           }
         },
       },
     ]);
   };
 
-  const ProductCard = ({ item }: { item: Product }) => (
-    <View style={styles.productCard}>
-      <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productCompany}>{item.company}</Text>
-        <View style={styles.productDetails}>
-          <Text style={styles.productDetail}>Price: ${item.selling_price}</Text>
-          <Text style={styles.productDetail}>Stock: {item.quantity}</Text>
+  const PersonCard = ({ item }: { item: DeliveryPerson }) => (
+    <View style={styles.personCard}>
+      <View style={styles.personInfo}>
+        <Text style={styles.personName}>{item.name}</Text>
+        <View style={styles.statusBadge}>
+          <Text style={[styles.statusText, { color: item.is_active ? '#4CAF50' : '#f44336' }]}>
+            {item.is_active ? 'Active' : 'Inactive'}
+          </Text>
+        </View>
+        <View style={styles.personDetails}>
+          <Text style={styles.personDetail}>{item.contact_number}</Text>
+          {item.whatsapp_number && <Text style={styles.personDetail}>{item.whatsapp_number}</Text>}
         </View>
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/product-detail/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/delivery/detail/${item.id}`)}>
           <Eye size={20} color="#007AFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/edit-product/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/delivery/edit/${item.id}`)}>
           <Edit2 size={20} color="#FF9800" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
@@ -78,24 +80,24 @@ export default function ProductsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Products</Text>
+        <Text style={styles.title}>Delivery Persons</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/add-product')}
+          onPress={() => router.push('/(app)/admin/delivery/add')}
         >
           <Plus size={20} color="#fff" />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={products}
-        renderItem={ProductCard}
+        data={persons}
+        renderItem={PersonCard}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchProducts} />}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchPersons} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No products found</Text>
+            <Text style={styles.emptyText}>No delivery persons found</Text>
           </View>
         }
       />
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  productCard: {
+  personCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
@@ -140,25 +142,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  productInfo: {
+  personInfo: {
     flex: 1,
   },
-  productName: {
+  personName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1a1a1a',
-    marginBottom: 4,
-  },
-  productCompany: {
-    fontSize: 14,
-    color: '#666',
     marginBottom: 8,
   },
-  productDetails: {
+  statusBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    backgroundColor: '#f0f0f0',
+    marginBottom: 8,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  personDetails: {
     flexDirection: 'row',
     gap: 12,
   },
-  productDetail: {
+  personDetail: {
     fontSize: 12,
     color: '#999',
   },
@@ -175,3 +184,4 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+

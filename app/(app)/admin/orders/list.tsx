@@ -4,70 +4,93 @@ import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
 
-interface DeliveryPerson {
+interface Order {
   id: string;
-  name: string;
-  contact_number: string;
-  whatsapp_number?: string;
-  address?: string;
-  is_active: boolean;
+  order_number: string;
+  customer_id: string;
+  status: string;
+  total_amount: number;
+  created_at: string;
+  customers?: { name: string; shop_name: string };
 }
 
-export default function DeliveryPersonsScreen() {
-  const [persons, setPersons] = useState<DeliveryPerson[]>([]);
+export default function OrdersScreen() {
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchPersons = useCallback(async () => {
+  const fetchOrders = useCallback(async () => {
     try {
-      const { data } = await db.deliveryPersons.getAll();
-      setPersons(data || []);
+      const { data } = await db.orders.getAll();
+      setOrders(data || []);
     } catch (error) {
-      console.error('Error fetching delivery persons:', error);
+      console.error('Error fetching orders:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchPersons();
-  }, [fetchPersons]);
+    fetchOrders();
+  }, [fetchOrders]);
 
   const handleDelete = (id: string) => {
-    Alert.alert('Delete Delivery Person', 'Are you sure?', [
+    Alert.alert('Delete Order', 'Are you sure?', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          const { error } = await db.deliveryPersons.delete(id);
+          const { error } = await db.orders.delete(id);
           if (!error) {
-            setPersons(persons.filter(p => p.id !== id));
+            setOrders(orders.filter(o => o.id !== id));
           }
         },
       },
     ]);
   };
 
-  const PersonCard = ({ item }: { item: DeliveryPerson }) => (
-    <View style={styles.personCard}>
-      <View style={styles.personInfo}>
-        <Text style={styles.personName}>{item.name}</Text>
-        <View style={styles.statusBadge}>
-          <Text style={[styles.statusText, { color: item.is_active ? '#4CAF50' : '#f44336' }]}>
-            {item.is_active ? 'Active' : 'Inactive'}
-          </Text>
-        </View>
-        <View style={styles.personDetails}>
-          <Text style={styles.personDetail}>{item.contact_number}</Text>
-          {item.whatsapp_number && <Text style={styles.personDetail}>{item.whatsapp_number}</Text>}
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return '#FF9800';
+      case 'assigned':
+        return '#2196F3';
+      case 'in_transit':
+        return '#9C27B0';
+      case 'delivered':
+        return '#4CAF50';
+      case 'cancelled':
+        return '#f44336';
+      default:
+        return '#999';
+    }
+  };
+
+  const OrderCard = ({ item }: { item: Order }) => (
+    <View style={styles.orderCard}>
+      <View style={styles.orderInfo}>
+        <Text style={styles.orderNumber}>{item.order_number}</Text>
+        <Text style={styles.customerName}>{item.customers?.shop_name || 'Unknown'}</Text>
+        <View style={styles.orderDetails}>
+          <Text style={styles.orderDetail}>Amount: ${item.total_amount.toFixed(2)}</Text>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusColor(item.status) + '20' },
+            ]}
+          >
+            <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
+              {item.status.toUpperCase()}
+            </Text>
+          </View>
         </View>
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/delivery-person-detail/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/orders/detail/${item.id}`)}>
           <Eye size={20} color="#007AFF" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/edit-delivery-person/${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/(app)/admin/orders/edit/${item.id}`)}>
           <Edit2 size={20} color="#FF9800" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
@@ -80,24 +103,24 @@ export default function DeliveryPersonsScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Delivery Persons</Text>
+        <Text style={styles.title}>Orders</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/add-delivery-person')}
+          onPress={() => router.push('/(app)/admin/orders/create')}
         >
           <Plus size={20} color="#fff" />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={persons}
-        renderItem={PersonCard}
+        data={orders}
+        renderItem={OrderCard}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
-        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchPersons} />}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No delivery persons found</Text>
+            <Text style={styles.emptyText}>No orders found</Text>
           </View>
         }
       />
@@ -134,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  personCard: {
+  orderCard: {
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
@@ -142,34 +165,37 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  personInfo: {
+  orderInfo: {
     flex: 1,
   },
-  personName: {
+  orderNumber: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1a1a1a',
+    marginBottom: 4,
+  },
+  customerName: {
+    fontSize: 14,
+    color: '#666',
     marginBottom: 8,
   },
+  orderDetails: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  orderDetail: {
+    fontSize: 12,
+    color: '#999',
+  },
   statusBadge: {
-    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    backgroundColor: '#f0f0f0',
-    marginBottom: 8,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
-  },
-  personDetails: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  personDetail: {
-    fontSize: 12,
-    color: '#999',
   },
   actions: {
     flexDirection: 'row',
@@ -184,3 +210,4 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+

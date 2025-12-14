@@ -17,8 +17,9 @@ export default function Login() {
 
     setLoading(true);
     try {
-      await signIn(email, password);
-      router.replace('/(app)');
+      const test = await signIn(email, password);
+      console.log(test);
+      router.replace('/(app)/admin/dashboard');
     } catch (error: any) {
       Alert.alert('Login Error', error.message || 'Failed to login');
     } finally {
