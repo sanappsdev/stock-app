@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { List, Plus, Edit, FileText, Eye } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
 
 export default function OrdersHubScreen() {
-  const MenuCard = ({ icon: Icon, label, onPress, color = '#007AFF' }: any) => (
+  const MenuCard = ({ icon: Icon, label, onPress, color = colors.primary }: any) => (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: color + '20' }]}>
         <Icon size={32} color={color} />
@@ -24,25 +25,25 @@ export default function OrdersHubScreen() {
             icon={List}
             label="Order List"
             onPress={() => router.push('/(app)/admin/orders/list')}
-            color="#007AFF"
+            color={colors.primary}
           />
           <MenuCard
             icon={Plus}
             label="Create Order"
             onPress={() => router.push('/(app)/admin/orders/create')}
-            color="#4CAF50"
+            color={colors.success}
           />
           <MenuCard
             icon={FileText}
             label="Order Details"
             onPress={() => router.push('/(app)/admin/orders/list')}
-            color="#FF9800"
+            color={colors.warning}
           />
           <MenuCard
             icon={Edit}
             label="Edit Order"
             onPress={() => router.push('/(app)/admin/orders/list')}
-            color="#9C27B0"
+            color={colors.primaryLight}
           />
         </View>
       </View>
@@ -53,19 +54,19 @@ export default function OrdersHubScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   header: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: colors.border,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
   },
   content: {
     padding: 20,
@@ -77,13 +78,13 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '47%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     minHeight: 120,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   cardLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colors.text,
     textAlign: 'center',
   },
 });

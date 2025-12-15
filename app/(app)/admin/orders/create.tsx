@@ -4,6 +4,8 @@ import { db } from '@/services/database';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { Plus, Trash2 } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Customer {
   id: string;
@@ -171,9 +173,7 @@ export default function CreateOrderScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Create Order</Text>
-      </View>
+      <ScreenHeader title="Create Order" />
 
       <View style={styles.form}>
         <Text style={styles.label}>Customer *</Text>
@@ -300,7 +300,7 @@ export default function CreateOrderScreen() {
           disabled={loading || !selectedCustomer || orderItems.length === 0}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textLight} />
           ) : (
             <Text style={styles.buttonText}>Create Order</Text>
           )}
@@ -313,19 +313,7 @@ export default function CreateOrderScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   form: {
     padding: 20,

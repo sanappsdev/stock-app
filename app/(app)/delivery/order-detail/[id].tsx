@@ -4,6 +4,8 @@ import { db } from '@/services/database';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Clock } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Order {
   id: string;
@@ -26,10 +28,10 @@ interface Order {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'assigned', label: 'Assigned', color: '#2196F3' },
-  { value: 'in_transit', label: 'In Transit', color: '#9C27B0' },
-  { value: 'delivered', label: 'Delivered', color: '#4CAF50' },
-  { value: 'issues', label: 'Issues', color: '#f44336' },
+  { value: 'assigned', label: 'Assigned', color: colors.info },
+  { value: 'in_transit', label: 'In Transit', color: colors.primary },
+  { value: 'delivered', label: 'Delivered', color: colors.success },
+  { value: 'issues', label: 'Issues', color: colors.error },
 ];
 
 export default function DeliveryOrderDetailScreen() {
@@ -94,7 +96,10 @@ export default function DeliveryOrderDetailScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ScreenHeader title="Order Details" showHome={false} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
       </View>
     );
   }
@@ -111,13 +116,7 @@ export default function DeliveryOrderDetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backButton}>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Order Details</Text>
-        <View style={{ width: 24 }} />
-      </View>
+      <ScreenHeader title="Order Details" showHome={false} />
 
       <View style={styles.content}>
         <View style={styles.section}>
@@ -133,7 +132,7 @@ export default function DeliveryOrderDetailScreen() {
               <View
                 style={[
                   styles.statusBadge,
-                  { backgroundColor: (currentStatusOption?.color || '#999') + '20' },
+                  { backgroundColor: (currentStatusOption?.color || colors.textTertiary) + '20' },
                 ]}
               >
                 <Text style={[styles.statusText, { color: currentStatusOption?.color }]}>
@@ -233,7 +232,7 @@ export default function DeliveryOrderDetailScreen() {
             disabled={updating || selectedStatus === order.status}
           >
             {updating ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.textLight} />
             ) : (
               <Text style={styles.buttonText}>Update Status</Text>
             )}
@@ -247,27 +246,12 @@ export default function DeliveryOrderDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    color: '#007AFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
   },
   content: {
     padding: 16,
@@ -278,11 +262,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 12,
   },
   infoCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -294,17 +278,17 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   value: {
     fontSize: 14,
-    color: '#1a1a1a',
+    color: colors.text,
     fontWeight: '600',
   },
   divider: {
     height: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.borderLight,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -316,7 +300,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   itemCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 12,
     flexDirection: 'row',
@@ -330,17 +314,17 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
   },
   itemQuantity: {
     fontSize: 12,
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 4,
   },
   itemTotal: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
   },
   statusOptions: {
     flexDirection: 'row',
@@ -353,46 +337,47 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     flex: 1,
     minWidth: '45%',
   },
   statusOptionActive: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
   },
   statusOptionText: {
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
   },
   statusOptionTextActive: {
-    color: '#fff',
+    color: colors.textLight,
   },
   textarea: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 14,
     minHeight: 100,
     textAlignVertical: 'top',
+    color: colors.text,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 16,
     fontWeight: 'bold',
   },
   errorText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });

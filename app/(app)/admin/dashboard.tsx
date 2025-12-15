@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/services/database';
 import { useState, useEffect } from 'react';
 import { Package, Users, Truck, ShoppingCart, BarChart3, LogOut } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
 
 interface DashboardStats {
   totalProducts: number;
@@ -68,7 +69,7 @@ export default function AdminDashboard() {
 
   const MenuCard = ({ icon: Icon, label, value, onPress }: any) => (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Icon size={32} color="#007AFF" />
+      <Icon size={32} color={colors.primary} />
       <Text style={styles.cardLabel}>{label}</Text>
       <Text style={styles.cardValue}>{value}</Text>
     </TouchableOpacity>
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
       <View style={styles.header}>
         <Text style={styles.title}>Dashboard</Text>
         <TouchableOpacity onPress={handleLogout}>
-          <LogOut size={24} color="#f44336" />
+          <LogOut size={24} color={colors.error} />
         </TouchableOpacity>
       </View>
 
@@ -131,7 +132,7 @@ export default function AdminDashboard() {
           <View style={styles.divider} />
           <View style={styles.analyticsRow}>
             <Text style={styles.analyticsLabel}>Total Profit</Text>
-            <Text style={[styles.analyticsValue, { color: '#4CAF50' }]}>
+            <Text style={[styles.analyticsValue, { color: colors.success }]}>
               ${stats.totalProfit.toFixed(2)}
             </Text>
           </View>
@@ -141,7 +142,7 @@ export default function AdminDashboard() {
           style={styles.analyticsButton}
           onPress={() => router.push('/(app)/admin/orders')}
         >
-          <BarChart3 size={20} color="#007AFF" />
+          <BarChart3 size={20} color={colors.textLight} />
           <Text style={styles.analyticsButtonText}>View Detailed Analytics</Text>
         </TouchableOpacity>
       </View>
@@ -152,7 +153,7 @@ export default function AdminDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -160,14 +161,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: colors.border,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
   },
   statsContainer: {
     padding: 20,
@@ -179,26 +180,26 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: colors.shadow,
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   cardLabel: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 8,
     fontWeight: '500',
   },
   cardValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginTop: 4,
   },
   analyticsSection: {
@@ -208,11 +209,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 12,
   },
   analyticsCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -224,21 +225,21 @@ const styles = StyleSheet.create({
   },
   analyticsLabel: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   analyticsValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: colors.primary,
   },
   divider: {
     height: 1,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: colors.border,
     marginVertical: 12,
   },
   analyticsButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     borderRadius: 8,
     padding: 12,
     flexDirection: 'row',
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   analyticsButtonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 14,
     fontWeight: 'bold',
   },

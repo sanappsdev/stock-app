@@ -4,6 +4,8 @@ import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Eye } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Order {
   id: string;
@@ -45,17 +47,17 @@ export default function DeliveryOrdersScreen() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return '#FF9800';
+        return colors.warning;
       case 'assigned':
-        return '#2196F3';
+        return colors.info;
       case 'in_transit':
-        return '#9C27B0';
+        return colors.primary;
       case 'delivered':
-        return '#4CAF50';
+        return colors.success;
       case 'cancelled':
-        return '#f44336';
+        return colors.error;
       default:
-        return '#999';
+        return colors.textTertiary;
     }
   };
 
@@ -80,16 +82,14 @@ export default function DeliveryOrdersScreen() {
       </View>
 
       <TouchableOpacity onPress={() => router.push(`/(app)/delivery/order-detail/${item.id}`)}>
-        <Eye size={24} color="#007AFF" />
+        <Eye size={24} color={colors.primary} />
       </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>My Orders</Text>
-      </View>
+      <ScreenHeader title="My Orders" showHome={false} />
 
       <FlatList
         data={orders}
@@ -110,26 +110,14 @@ export default function DeliveryOrdersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   listContainer: {
     padding: 16,
     gap: 12,
   },
   orderCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',
@@ -142,12 +130,12 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 4,
   },
   customerName: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 8,
   },
   orderDetails: {
@@ -157,7 +145,7 @@ const styles = StyleSheet.create({
   },
   orderDetail: {
     fontSize: 12,
-    color: '#999',
+    color: colors.textTertiary,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -174,6 +162,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });

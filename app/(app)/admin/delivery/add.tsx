@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 export default function AddDeliveryPersonScreen() {
   const { userProfile } = useAuth();
@@ -43,9 +45,7 @@ export default function AddDeliveryPersonScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Add Delivery Person</Text>
-      </View>
+      <ScreenHeader title="Add Delivery Person" />
 
       <View style={styles.form}>
         <Text style={styles.label}>Name *</Text>
@@ -54,7 +54,7 @@ export default function AddDeliveryPersonScreen() {
           placeholder="Enter full name"
           value={formData.name}
           onChangeText={text => setFormData({ ...formData, name: text })}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Contact Number *</Text>
@@ -64,7 +64,7 @@ export default function AddDeliveryPersonScreen() {
           value={formData.contact_number}
           onChangeText={text => setFormData({ ...formData, contact_number: text })}
           keyboardType="phone-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>WhatsApp Number</Text>
@@ -74,7 +74,7 @@ export default function AddDeliveryPersonScreen() {
           value={formData.whatsapp_number}
           onChangeText={text => setFormData({ ...formData, whatsapp_number: text })}
           keyboardType="phone-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Address</Text>
@@ -85,7 +85,7 @@ export default function AddDeliveryPersonScreen() {
           onChangeText={text => setFormData({ ...formData, address: text })}
           multiline
           numberOfLines={3}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <View style={styles.switchContainer}>
@@ -93,8 +93,8 @@ export default function AddDeliveryPersonScreen() {
           <Switch
             value={isActive}
             onValueChange={setIsActive}
-            trackColor={{ false: '#ccc', true: '#81c784' }}
-            thumbColor={isActive ? '#4CAF50' : '#f44336'}
+            trackColor={{ false: colors.borderDark, true: colors.successLight }}
+            thumbColor={isActive ? colors.success : colors.error}
           />
         </View>
 
@@ -104,7 +104,7 @@ export default function AddDeliveryPersonScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textLight} />
           ) : (
             <Text style={styles.buttonText}>Add Delivery Person</Text>
           )}
@@ -117,19 +117,7 @@ export default function AddDeliveryPersonScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   form: {
     padding: 20,
@@ -138,15 +126,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colors.text,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     fontSize: 16,
+    color: colors.text,
   },
   textArea: {
     minHeight: 80,
@@ -156,21 +145,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 16,
     fontWeight: 'bold',
   },

@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/theme/colors';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@stockmanager.com');
+  const [password, setPassword] = useState('Admin@123456');
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
 
@@ -40,7 +41,7 @@ export default function Login() {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TextInput
@@ -49,7 +50,7 @@ export default function Login() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TouchableOpacity
@@ -58,7 +59,7 @@ export default function Login() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textLight} />
           ) : (
             <Text style={styles.buttonText}>Login</Text>
           )}
@@ -80,17 +81,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#1a1a1a',
+    color: colors.text,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 40,
   },
   form: {
@@ -98,21 +99,22 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
     padding: 12,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     fontSize: 16,
+    color: colors.text,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -122,11 +124,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupText: {
-    color: '#666',
+    color: colors.textSecondary,
     fontSize: 14,
   },
   signupLink: {
-    color: '#007AFF',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: 'bold',
   },

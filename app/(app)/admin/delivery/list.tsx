@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface DeliveryPerson {
   id: string;
@@ -53,7 +55,7 @@ export default function DeliveryPersonsScreen() {
       <View style={styles.personInfo}>
         <Text style={styles.personName}>{item.name}</Text>
         <View style={styles.statusBadge}>
-          <Text style={[styles.statusText, { color: item.is_active ? '#4CAF50' : '#f44336' }]}>
+          <Text style={[styles.statusText, { color: item.is_active ? colors.success : colors.error }]}>
             {item.is_active ? 'Active' : 'Inactive'}
           </Text>
         </View>
@@ -65,13 +67,13 @@ export default function DeliveryPersonsScreen() {
 
       <View style={styles.actions}>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/delivery/detail/${item.id}`)}>
-          <Eye size={20} color="#007AFF" />
+          <Eye size={20} color={colors.primary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/delivery/edit/${item.id}`)}>
-          <Edit2 size={20} color="#FF9800" />
+          <Edit2 size={20} color={colors.warning} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
-          <Trash2 size={20} color="#f44336" />
+          <Trash2 size={20} color={colors.error} />
         </TouchableOpacity>
       </View>
     </View>
@@ -79,15 +81,17 @@ export default function DeliveryPersonsScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Delivery Persons</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/delivery/add')}
-        >
-          <Plus size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title="Delivery Persons"
+        rightAction={
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => router.push('/(app)/admin/delivery/add')}
+          >
+            <Plus size={20} color={colors.textLight} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         data={persons}
@@ -108,25 +112,10 @@ export default function DeliveryPersonsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   addButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 8,
   },
@@ -135,7 +124,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   personCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',
@@ -148,7 +137,7 @@ const styles = StyleSheet.create({
   personName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 8,
   },
   statusBadge: {
@@ -156,7 +145,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.backgroundDark,
     marginBottom: 8,
   },
   statusText: {
@@ -169,7 +158,7 @@ const styles = StyleSheet.create({
   },
   personDetail: {
     fontSize: 12,
-    color: '#999',
+    color: colors.textTertiary,
   },
   actions: {
     flexDirection: 'row',
@@ -181,7 +170,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });
 

@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Order {
   id: string;
@@ -52,17 +54,17 @@ export default function OrdersScreen() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return '#FF9800';
+        return colors.warning;
       case 'assigned':
-        return '#2196F3';
+        return colors.info;
       case 'in_transit':
-        return '#9C27B0';
+        return colors.primary;
       case 'delivered':
-        return '#4CAF50';
+        return colors.success;
       case 'cancelled':
-        return '#f44336';
+        return colors.error;
       default:
-        return '#999';
+        return colors.textTertiary;
     }
   };
 
@@ -88,13 +90,13 @@ export default function OrdersScreen() {
 
       <View style={styles.actions}>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/orders/detail/${item.id}`)}>
-          <Eye size={20} color="#007AFF" />
+          <Eye size={20} color={colors.primary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/orders/edit/${item.id}`)}>
-          <Edit2 size={20} color="#FF9800" />
+          <Edit2 size={20} color={colors.warning} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
-          <Trash2 size={20} color="#f44336" />
+          <Trash2 size={20} color={colors.error} />
         </TouchableOpacity>
       </View>
     </View>
@@ -102,15 +104,17 @@ export default function OrdersScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Orders</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/orders/create')}
-        >
-          <Plus size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title="Orders"
+        rightAction={
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => router.push('/(app)/admin/orders/create')}
+          >
+            <Plus size={20} color={colors.textLight} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         data={orders}
@@ -131,25 +135,10 @@ export default function OrdersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   addButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 8,
   },
@@ -158,7 +147,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   orderCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',
@@ -171,12 +160,12 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 4,
   },
   customerName: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 8,
   },
   orderDetails: {
@@ -186,7 +175,7 @@ const styles = StyleSheet.create({
   },
   orderDetail: {
     fontSize: 12,
-    color: '#999',
+    color: colors.textTertiary,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -207,7 +196,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });
 

@@ -5,6 +5,7 @@ import { Stack, Tabs } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Home, Package, Users, Truck, FileText } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
 
 export default function AppLayout() {
   const { session, loading, isAdmin, isDeliveryPerson } = useAuth();
@@ -18,7 +19,7 @@ export default function AppLayout() {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -38,7 +39,7 @@ export default function AppLayout() {
     ]);
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.backgroundLight }}>
         <Tabs
           screenOptions={({ route }) => {
             const routeName = route.name;
@@ -47,8 +48,8 @@ export default function AppLayout() {
             return {
               headerShown: false,
               tabBarStyle: {
-                backgroundColor: '#fff',
-                borderTopColor: '#e0e0e0',
+                backgroundColor: colors.backgroundLight,
+                borderTopColor: colors.border,
                 borderTopWidth: 1,
                 display: shouldShow ? 'flex' : 'none',
                 height: 72,
@@ -59,6 +60,8 @@ export default function AppLayout() {
                 shadowRadius: 0,
                 elevation: 0,
               },
+              tabBarActiveTintColor: colors.primary,
+              tabBarInactiveTintColor: colors.textSecondary,
               tabBarButton: shouldShow ? undefined : () => null,
               tabBarItemStyle: shouldShow ? undefined : { display: 'none' },
             };
@@ -202,14 +205,16 @@ export default function AppLayout() {
 
   if (isDeliveryPerson) {
     return (
-      <Tabs
+        <Tabs
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: '#fff',
-            borderTopColor: '#e0e0e0',
+            backgroundColor: colors.backgroundLight,
+            borderTopColor: colors.border,
             borderTopWidth: 1,
           },
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.textSecondary,
         }}
       >
         <Tabs.Screen

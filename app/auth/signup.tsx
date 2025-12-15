@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/theme/colors';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -41,7 +42,7 @@ export default function Signup() {
           placeholder="Full Name"
           value={fullName}
           onChangeText={setFullName}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TextInput
@@ -51,7 +52,7 @@ export default function Signup() {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TextInput
@@ -60,7 +61,7 @@ export default function Signup() {
           value={phone}
           onChangeText={setPhone}
           keyboardType="phone-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TextInput
@@ -69,7 +70,7 @@ export default function Signup() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.roleLabel}>Select Role:</Text>
@@ -105,7 +106,7 @@ export default function Signup() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textLight} />
           ) : (
             <Text style={styles.buttonText}>Sign Up</Text>
           )}
@@ -125,7 +126,7 @@ export default function Signup() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   contentContainer: {
     padding: 20,
@@ -135,11 +136,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#1a1a1a',
+    color: colors.text,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 32,
   },
   form: {
@@ -147,16 +148,17 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
     padding: 12,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     fontSize: 16,
+    color: colors.text,
   },
   roleLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colors.text,
     marginTop: 8,
   },
   roleContainer: {
@@ -168,31 +170,31 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
+    borderColor: colors.border,
+    backgroundColor: colors.backgroundLight,
     alignItems: 'center',
   },
   roleButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   roleText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   roleTextActive: {
-    color: '#fff',
+    color: colors.textLight,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -202,11 +204,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loginText: {
-    color: '#666',
+    color: colors.textSecondary,
     fontSize: 14,
   },
   loginLink: {
-    color: '#007AFF',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: 'bold',
   },

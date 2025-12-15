@@ -3,6 +3,8 @@ import { router } from 'expo-router';
 import { db } from '@/services/database';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 export default function AddCustomerScreen() {
   const { userProfile } = useAuth();
@@ -47,9 +49,7 @@ export default function AddCustomerScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Add Customer</Text>
-      </View>
+      <ScreenHeader title="Add Customer" />
 
       <View style={styles.form}>
         <Text style={styles.label}>Name *</Text>
@@ -58,7 +58,7 @@ export default function AddCustomerScreen() {
           placeholder="Enter customer name"
           value={formData.name}
           onChangeText={text => setFormData({ ...formData, name: text })}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Shop Name *</Text>
@@ -67,7 +67,7 @@ export default function AddCustomerScreen() {
           placeholder="Enter shop name"
           value={formData.shop_name}
           onChangeText={text => setFormData({ ...formData, shop_name: text })}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Shop Person Name</Text>
@@ -76,7 +76,7 @@ export default function AddCustomerScreen() {
           placeholder="Enter shop person name"
           value={formData.shop_person_name}
           onChangeText={text => setFormData({ ...formData, shop_person_name: text })}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Contact Number *</Text>
@@ -86,7 +86,7 @@ export default function AddCustomerScreen() {
           value={formData.contact_number}
           onChangeText={text => setFormData({ ...formData, contact_number: text })}
           keyboardType="phone-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>WhatsApp Number</Text>
@@ -96,7 +96,7 @@ export default function AddCustomerScreen() {
           value={formData.whatsapp_number}
           onChangeText={text => setFormData({ ...formData, whatsapp_number: text })}
           keyboardType="phone-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Address</Text>
@@ -107,7 +107,7 @@ export default function AddCustomerScreen() {
           onChangeText={text => setFormData({ ...formData, address: text })}
           multiline
           numberOfLines={3}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Latitude</Text>
@@ -117,7 +117,7 @@ export default function AddCustomerScreen() {
           value={formData.latitude}
           onChangeText={text => setFormData({ ...formData, latitude: text })}
           keyboardType="decimal-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <Text style={styles.label}>Longitude</Text>
@@ -127,7 +127,7 @@ export default function AddCustomerScreen() {
           value={formData.longitude}
           onChangeText={text => setFormData({ ...formData, longitude: text })}
           keyboardType="decimal-pad"
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
         />
 
         <TouchableOpacity
@@ -136,7 +136,7 @@ export default function AddCustomerScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textLight} />
           ) : (
             <Text style={styles.buttonText}>Add Customer</Text>
           )}
@@ -149,19 +149,7 @@ export default function AddCustomerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   form: {
     padding: 20,
@@ -170,29 +158,30 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colors.text,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.border,
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.backgroundLight,
     fontSize: 16,
+    color: colors.text,
   },
   textArea: {
     minHeight: 80,
     textAlignVertical: 'top',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.textLight,
     fontSize: 16,
     fontWeight: 'bold',
   },

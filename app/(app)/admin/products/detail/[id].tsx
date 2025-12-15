@@ -3,6 +3,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { db } from '@/services/database';
 import { useState, useEffect } from 'react';
 import { Edit2 } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Product {
   id: string;
@@ -40,7 +42,10 @@ export default function ProductDetailScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ScreenHeader title="Product Details" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
       </View>
     );
   }
@@ -55,15 +60,14 @@ export default function ProductDetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backButton}>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Product Details</Text>
-        <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/edit/${product.id}`)}>
-          <Edit2 size={24} color="#007AFF" />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title="Product Details"
+        rightAction={
+          <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/edit/${product.id}`)}>
+            <Edit2 size={24} color={colors.primary} />
+          </TouchableOpacity>
+        }
+      />
 
       <View style={styles.content}>
         <View style={styles.section}>
@@ -133,7 +137,7 @@ export default function ProductDetailScreen() {
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Current Stock</Text>
-              <Text style={[styles.value, { color: product.quantity > 0 ? '#4CAF50' : '#f44336' }]}>
+              <Text style={[styles.value, { color: product.quantity > 0 ? colors.success : colors.error }]}>
                 {product.quantity} {product.unit || 'pc'}
               </Text>
             </View>
@@ -147,29 +151,12 @@ export default function ProductDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    color: '#007AFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+  loadingContainer: {
     flex: 1,
-    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     padding: 16,
@@ -180,11 +167,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 12,
   },
   infoCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -196,31 +183,31 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   value: {
     fontSize: 14,
-    color: '#1a1a1a',
+    color: colors.text,
     fontWeight: '600',
   },
   divider: {
     height: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.borderLight,
   },
   descriptionCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 12,
   },
   descriptionText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 20,
   },
   errorText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });
 

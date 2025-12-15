@@ -4,6 +4,8 @@ import { db } from '@/services/database';
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, Eye } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/theme/colors';
+import ScreenHeader from '@/components/ScreenHeader';
 
 interface Product {
   id: string;
@@ -63,13 +65,13 @@ export default function ProductsScreen() {
 
       <View style={styles.actions}>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/detail/${item.id}`)}>
-          <Eye size={20} color="#007AFF" />
+          <Eye size={20} color={colors.primary} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push(`/(app)/admin/products/edit/${item.id}`)}>
-          <Edit2 size={20} color="#FF9800" />
+          <Edit2 size={20} color={colors.warning} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item.id)}>
-          <Trash2 size={20} color="#f44336" />
+          <Trash2 size={20} color={colors.error} />
         </TouchableOpacity>
       </View>
     </View>
@@ -77,15 +79,17 @@ export default function ProductsScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Products</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push('/(app)/admin/products/add')}
-        >
-          <Plus size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader
+        title="Products"
+        rightAction={
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => router.push('/(app)/admin/products/add')}
+          >
+            <Plus size={20} color={colors.textLight} />
+          </TouchableOpacity>
+        }
+      />
 
       <FlatList
         data={products}
@@ -106,25 +110,10 @@ export default function ProductsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    backgroundColor: colors.background,
   },
   addButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 8,
   },
@@ -133,7 +122,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   productCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 8,
     padding: 16,
     flexDirection: 'row',
@@ -146,12 +135,12 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colors.text,
     marginBottom: 4,
   },
   productCompany: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 8,
   },
   productDetails: {
@@ -160,7 +149,7 @@ const styles = StyleSheet.create({
   },
   productDetail: {
     fontSize: 12,
-    color: '#999',
+    color: colors.textTertiary,
   },
   actions: {
     flexDirection: 'row',
@@ -172,7 +161,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 });
 
